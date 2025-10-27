@@ -32,7 +32,7 @@ def marcar_habitos(habitos, nome):
     if nome in habitos:
         if hoje not in habitos[nome]:
             habitos[nome].append(hoje)
-            print(f"Hábito '{nome}' marcado como concluído para hoje!")
+            print(f"\033[92m Hábito '{nome}' marcado como concluído para hoje! \033[0m")
         else:
             print(f"Hábito '{nome}' já foi marcado como concluído hoje!")
     else:
@@ -62,8 +62,8 @@ def salvar_dados(habitos):
 def main():
     habitos = carregar_dados()  # Carrega os hábitos do arquivo JSON ou inicializa um dicionário vazio
     while True: 
-        print("------------------------------------------------")
-        print("Bem-vindo ao Rastreador de Hábitos!")
+        print("\033[94m ------------------------------------------------")
+        print(" Bem-vindo ao Rastreador de Hábitos! \033[0m")
         print("1. Adicionar hábito")
         print("2. Listar hábitos") 
         print("3. Marcar hábito como concluído")
@@ -94,7 +94,7 @@ def main():
                 print("Opção inválida, tente novamente!")
                 
         except ValueError:
-            print("Entrada inválida, por favor insira um número correspondente às opções.")
+            print("\033[91m Entrada inválida, por favor insira um número correspondente às opções. \033[0m")
             input("Pressione Enter para tentar novamente...")
             os.system('cls' if os.name == 'nt' else 'clear')
 
