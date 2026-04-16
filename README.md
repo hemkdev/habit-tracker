@@ -2,7 +2,7 @@
 
 ## Sobre
 
-O **Habit Tracker Python** é uma aplicação de linha de comando desenvolvida em Python para ajudar usuários a registrar e acompanhar seus hábitos diários. Ele permite adicionar novos hábitos, listar todos os hábitos, marcar hábitos como concluídos para o dia atual e visualizar o progresso. Os dados dos hábitos são armazenados em um arquivo JSON, garantindo persistência e facilidade de uso sem a necessidade de um banco de dados complexo. A interface é simples e baseada em texto, ideal para quem busca uma ferramenta leve e eficiente para gerenciamento de hábitos.
+O **Habit Tracker** é uma aplicação de linha de comando desenvolvida em Python para ajudar usuários a registrar e acompanhar seus hábitos diários. Ele permite gerenciar seu hábitos de maneira simples,adicionando, excluindo, listando e marcando hábitos como concluídos para o dia atual. Os dados dos são armazenados em um arquivo JSON, garantindo persistência e facilidade de uso sem a necessidade de um banco de dados complexo. A interface é simples e baseada em texto, ideal para quem busca uma ferramenta leve e eficiente para gerenciamento de hábitos.
 
 ## Requisitos
 
@@ -17,8 +17,8 @@ Siga os passos abaixo para configurar e executar o projeto localmente:
 1.  **Clone o repositório:**
 
     ```bash
-    git clone https://github.com/hemkdev/habit-tracker-python.git
-    cd habit-tracker-python
+    git clone https://github.com/hemkdev/habit-tracker.git
+    cd habit-tracker
     ```
 
 2.  **Execute a aplicação:**
@@ -36,9 +36,10 @@ Ao executar `main.py`, você verá um menu com as seguintes opções:
 *   **Adicionar Hábito:** Permite inserir um novo hábito na sua lista.
 *   **Listar Hábitos:** Exibe todos os hábitos registrados e o número de dias em que foram concluídos.
 *   **Marcar Hábito Concluído:** Permite marcar um hábito específico como concluído para a data atual.
+    **Excluir Hábito** Permite excluir um hábito de sua lista.
 *   **Sair:** Encerra a aplicação.
 
-Os dados são salvos automaticamente no arquivo `habitos.json` na mesma pasta do script.
+Os dados são salvos automaticamente no arquivo `habitos.json` criado na mesma pasta do script.
 
 ## Contribuições
 
