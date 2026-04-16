@@ -1,7 +1,7 @@
-import json # Para salvar e carregar dados
-from datetime import date # Para registrar a data de conclusão
-import os # Para verificar se o arquivo existe
-import time # Para pausar a tela e dar feedback visual
+import json # Manipulação de dados em json
+from datetime import date # Data e hora atual
+import os # Interação com sistema operacional
+import time # pausas
 
 # -- FUNÇÕES AUXILIARES -- #
 
@@ -36,12 +36,12 @@ def adicionar_habito(habitos, nome):
 def listar_habitos(habitos):
     if not habitos:
         print("Nenhum hábito cadastrado!")
-        input("Pressione Enter para continuar...")
+        time.sleep(1.5)
         os.system('cls' if os.name == 'nt' else 'clear')
         return
     for nome, dias in habitos.items():
         print(f"- {nome} | Dias concluídos: {len(dias)}")
-    input("Pressione Enter para continuar...")
+    time.sleep(1.5)
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def marcar_habitos(habitos, nome):
@@ -50,26 +50,26 @@ def marcar_habitos(habitos, nome):
         if hoje not in habitos[nome]:
             habitos[nome].append(hoje)
             print_sucesso(f"Hábito '{nome}' marcado como concluído para hoje!")
-            input("Pressione Enter para continuar...")
+            time.sleep(1.5)
             os.system('cls' if os.name == 'nt' else 'clear')
         else:
             print_erro(f"Hábito '{nome}' já foi marcado como concluído hoje!")
-            input("Pressione Enter para continuar...")
+            time.sleep(1.5)
         os.system('cls' if os.name == 'nt' else 'clear')
     else:
             print_erro("Hábito não encontrado!")
-            input("Pressione Enter para continuar...")
+            time.sleep(1.5)
             os.system('cls' if os.name == 'nt' else 'clear')
 
 def excluir_habito(habitos, nome):
     if nome in habitos:
         del habitos[nome]
         print_sucesso(f"Hábito '{nome}' excluído com sucesso!")
-        input("Pressione Enter para continuar...")
+        time.sleep(1.5)
         os.system('cls' if os.name == 'nt' else 'clear')
     else:
         print_erro("Hábito não encontrado!")
-        input("Pressione Enter para continuar...")
+        time.sleep(1.5)
         os.system('cls' if os.name == 'nt' else 'clear')
 
 def salvar_dados(habitos):
@@ -87,8 +87,7 @@ def main():
         print("2. Listar hábitos") 
         print("3. Marcar hábito como concluído")
         print("4. Excluir hábito")
-        print("5. Limpar tela")
-        print("6. Sair")
+        print("5. Sair")
         try:
             escolha = int(input("Escolha uma opção: "))
 
@@ -104,8 +103,6 @@ def main():
                 nome = input("Digite o nome do hábito que deseja excluir: ")
                 excluir_habito(habitos, nome)
             elif escolha == 5:
-                os.system('cls')
-            elif escolha == 6:
                 salvar_dados(habitos)
                 print_sucesso("Progresso salvo. Até mais!")
                 break
