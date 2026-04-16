@@ -1,8 +1,15 @@
 import json # Para salvar e carregar dados
 from datetime import date # Para registrar a data de conclusão
 import os # Para verificar se o arquivo existe
+import time # Para pausar a tela e dar feedback visual
 
 # -- FUNÇÕES AUXILIARES -- #
+
+def print_sucesso(mensagem):
+    print(f"\033[92m{mensagem}\033[0m")
+
+def print_erro(mensagem):
+    print(f"\033[91m{mensagem}\033[0m")
 
 def carregar_dados():
     if os.path.exists("habitos.json"):
@@ -16,14 +23,14 @@ def carregar_dados():
 def adicionar_habito(habitos, nome):
     if nome not in habitos:
         habitos[nome] = []
-        print(f"Hábito '{nome}' adicionado e salvo com sucesso!")
+        print_sucesso(f"Hábito '{nome}' adicionado e salvo com sucesso!")
         with open("habitos.json", "w") as arquivo:
             json.dump(habitos, arquivo)
-        input("Pressione Enter para continuar...")
+        time.sleep(1.5) 
         os.system('cls' if os.name == 'nt' else 'clear')   
     else:
-        print("Esse hábito já existe!")
-        input("Pressione Enter para continuar...")
+        print_erro("Esse hábito já existe!")
+        time.sleep(1.5)
         os.system('cls' if os.name == 'nt' else 'clear')
 
 def listar_habitos(habitos):
@@ -42,30 +49,28 @@ def marcar_habitos(habitos, nome):
     if nome in habitos:
         if hoje not in habitos[nome]:
             habitos[nome].append(hoje)
-            print(f"\033[92m Hábito '{nome}' marcado como concluído para hoje! \033[0m")
+            print_sucesso(f"Hábito '{nome}' marcado como concluído para hoje!")
             input("Pressione Enter para continuar...")
             os.system('cls' if os.name == 'nt' else 'clear')
         else:
-            print(f"Hábito '{nome}' já foi marcado como concluído hoje!")
+            print_erro(f"Hábito '{nome}' já foi marcado como concluído hoje!")
             input("Pressione Enter para continuar...")
         os.system('cls' if os.name == 'nt' else 'clear')
     else:
-        print("Hábito não encontrado!")
-        input("Pressione Enter para continuar...")
-        os.system('cls' if os.name == 'nt' else 'clear')
+            print_erro("Hábito não encontrado!")
+            input("Pressione Enter para continuar...")
+            os.system('cls' if os.name == 'nt' else 'clear')
 
-    with open("habitos.json", "w") as arquivo:
-        json.dump(habitos, arquivo)
-
-def ver_progresso(habitos, nome):
+def excluir_habito(habitos, nome):
     if nome in habitos:
-        dias_concluidos = habitos[nome]
-        print(f"Progresso do hábito '{nome}': {len(dias_concluidos)} dias concluídos.")
+        del habitos[nome]
+        print_sucesso(f"Hábito '{nome}' excluído com sucesso!")
         input("Pressione Enter para continuar...")
         os.system('cls' if os.name == 'nt' else 'clear')
     else:
-        print("Hábito não encontrado!")
-        print("Pressione Enter para continuar...")
+        print_erro("Hábito não encontrado!")
+        input("Pressione Enter para continuar...")
+        os.system('cls' if os.name == 'nt' else 'clear')
 
 def salvar_dados(habitos):
     with open("habitos.json", "w") as arquivo:
@@ -81,7 +86,7 @@ def main():
         print("1. Adicionar hábito")
         print("2. Listar hábitos") 
         print("3. Marcar hábito como concluído")
-        print("4. Ver progresso")
+        print("4. Excluir hábito")
         print("5. Limpar tela")
         print("6. Sair")
         try:
@@ -96,19 +101,19 @@ def main():
                 nome = input("Digite o nome do hábito que deseja marcar como concluido: ")
                 marcar_habitos(habitos, nome)
             elif escolha == 4:
-                nome = input("Digite o nome do hábito que deseja ver o progresso: ")
-                ver_progresso(habitos, nome)
+                nome = input("Digite o nome do hábito que deseja excluir: ")
+                excluir_habito(habitos, nome)
             elif escolha == 5:
                 os.system('cls')
             elif escolha == 6:
                 salvar_dados(habitos)
-                print("Progresso salvo. Até mais!")
+                print_sucesso("Progresso salvo. Até mais!")
                 break
             else:
-                print("Opção inválida, tente novamente!")
+                print_erro("Opção inválida, tente novamente!")
                 
         except ValueError:
-            print("\033[91m Entrada inválida, por favor insira um número correspondente às opções. \033[0m")
+            print_erro("Entrada inválida, por favor insira um número correspondente às opções.")
             input("Pressione Enter para tentar novamente...")
             os.system('cls' if os.name == 'nt' else 'clear')
 
