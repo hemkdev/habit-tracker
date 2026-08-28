@@ -1,110 +1,110 @@
-import json # Manipulação de dados em json
-from datetime import date # Data e hora atual
-import os # Interação com sistema operacional
-import time # pausas
+import json # JSON data handling
+from datetime import date # Current date
+import os # Operating system interaction
+import time # Pauses
 
-ARQUIVO_DADOS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "habitos.json")
+DATA_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "habits.json")
 
-# -- FUNÇÕES AUXILIARES -- #
+# -- HELPER FUNCTIONS -- #
 
-def print_sucesso(mensagem):
-    print(f"\033[92m{mensagem}\033[0m")
+def print_success(message):
+    print(f"\033[92m{message}\033[0m")
 
-def print_erro(mensagem):
-    print(f"\033[91m{mensagem}\033[0m")
+def print_error(message):
+    print(f"\033[91m{message}\033[0m")
 
-def pausar():
+def pause():
     time.sleep(1.5)
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def carregar_dados():
-    if os.path.exists(ARQUIVO_DADOS):
-        with open(ARQUIVO_DADOS, "r") as arquivo:
+def load_data():
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, "r") as file:
             try:
-                return json.load(arquivo)
+                return json.load(file)
             except json.JSONDecodeError:
                 return {}
     return {}
 
-def salvar_dados(habitos):
-    with open(ARQUIVO_DADOS, "w") as arquivo:
-        json.dump(habitos, arquivo)
+def save_data(habits):
+    with open(DATA_FILE, "w") as file:
+        json.dump(habits, file)
 
-def adicionar_habito(habitos, nome):
-    if nome not in habitos:
-        habitos[nome] = []
-        salvar_dados(habitos)
-        print_sucesso(f"Hábito '{nome}' adicionado e salvo com sucesso!")
+def add_habit(habits, name):
+    if name not in habits:
+        habits[name] = []
+        save_data(habits)
+        print_success(f"Habit '{name}' added and saved successfully!")
     else:
-        print_erro("Esse hábito já existe!")
-    pausar()
+        print_error("This habit already exists!")
+    pause()
 
-def listar_habitos(habitos):
-    if not habitos:
-        print("Nenhum hábito cadastrado!")
-        pausar()
+def list_habits(habits):
+    if not habits:
+        print("No habits registered!")
+        pause()
         return
-    for nome, dias in habitos.items():
-        print(f"- {nome} | Dias concluídos: {len(dias)}")
-    pausar()
+    for name, days in habits.items():
+        print(f"- {name} | Days completed: {len(days)}")
+    pause()
 
-def marcar_habitos(habitos, nome):
-    hoje = str(date.today())
-    if nome not in habitos:
-        print_erro("Hábito não encontrado!")
-    elif hoje in habitos[nome]:
-        print_erro(f"Hábito '{nome}' já foi marcado como concluído hoje!")
+def mark_habit(habits, name):
+    today = str(date.today())
+    if name not in habits:
+        print_error("Habit not found!")
+    elif today in habits[name]:
+        print_error(f"Habit '{name}' has already been marked as done today!")
     else:
-        habitos[nome].append(hoje)
-        salvar_dados(habitos)
-        print_sucesso(f"Hábito '{nome}' marcado como concluído para hoje!")
-    pausar()
+        habits[name].append(today)
+        save_data(habits)
+        print_success(f"Habit '{name}' marked as done for today!")
+    pause()
 
-def excluir_habito(habitos, nome):
-    if nome in habitos:
-        del habitos[nome]
-        salvar_dados(habitos)
-        print_sucesso(f"Hábito '{nome}' excluído com sucesso!")
+def delete_habit(habits, name):
+    if name in habits:
+        del habits[name]
+        save_data(habits)
+        print_success(f"Habit '{name}' deleted successfully!")
     else:
-        print_erro("Hábito não encontrado!")
-    pausar()
+        print_error("Habit not found!")
+    pause()
 
-# -- PROGRAMA PRINCIPAL -- 
+# -- MAIN PROGRAM -- 
 def main():
-    habitos = carregar_dados()  # Carrega os hábitos do arquivo JSON ou inicializa um dicionário vazio
+    habits = load_data()  # Loads habits from the JSON file or starts an empty dictionary
     while True: 
         print("\033[94m ------------------------------------------------")
-        print(" Bem-vindo ao Rastreador de Hábitos!")
+        print(" Welcome to the Habit Tracker!")
         print(" ------------------------------------------------ \033[0m")
-        print("1. Adicionar hábito")
-        print("2. Listar hábitos") 
-        print("3. Marcar hábito como concluído")
-        print("4. Excluir hábito")
-        print("5. Sair")
+        print("1. Add habit")
+        print("2. List habits") 
+        print("3. Mark habit as done")
+        print("4. Delete habit")
+        print("5. Exit")
         try:
-            escolha = int(input("Escolha uma opção: "))
+            choice = int(input("Choose an option: "))
 
-            if escolha == 1:
-                nome = str(input("Digite o nome do hábito que deseja adicionar: "))
-                adicionar_habito(habitos, nome)
-            elif escolha == 2:
-                listar_habitos(habitos)
-            elif escolha == 3:
-                nome = input("Digite o nome do hábito que deseja marcar como concluido: ")
-                marcar_habitos(habitos, nome)
-            elif escolha == 4:
-                nome = input("Digite o nome do hábito que deseja excluir: ")
-                excluir_habito(habitos, nome)
-            elif escolha == 5:
-                salvar_dados(habitos)
-                print_sucesso("Progresso salvo. Até mais!")
+            if choice == 1:
+                name = input("Enter the name of the habit to add: ")
+                add_habit(habits, name)
+            elif choice == 2:
+                list_habits(habits)
+            elif choice == 3:
+                name = input("Enter the name of the habit to mark as done: ")
+                mark_habit(habits, name)
+            elif choice == 4:
+                name = input("Enter the name of the habit to delete: ")
+                delete_habit(habits, name)
+            elif choice == 5:
+                save_data(habits)
+                print_success("Progress saved. See you!")
                 break
             else:
-                print_erro("Opção inválida, tente novamente!")
+                print_error("Invalid option, please try again!")
                 
         except ValueError:
-            print_erro("Entrada inválida, por favor insira um número correspondente às opções.")
-            input("Pressione Enter para tentar novamente...")
+            print_error("Invalid input, please enter a number matching the options.")
+            input("Press Enter to try again...")
             os.system('cls' if os.name == 'nt' else 'clear')
 
         
