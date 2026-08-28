@@ -3,6 +3,8 @@ from datetime import date # Data e hora atual
 import os # Interação com sistema operacional
 import time # pausas
 
+ARQUIVO_DADOS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "habitos.json")
+
 # -- FUNÇÕES AUXILIARES -- #
 
 def print_sucesso(mensagem):
@@ -11,70 +13,61 @@ def print_sucesso(mensagem):
 def print_erro(mensagem):
     print(f"\033[91m{mensagem}\033[0m")
 
+def pausar():
+    time.sleep(1.5)
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 def carregar_dados():
-    if os.path.exists("habitos.json"):
-        with open("habitos.json", "r") as arquivo:
+    if os.path.exists(ARQUIVO_DADOS):
+        with open(ARQUIVO_DADOS, "r") as arquivo:
             try:
                 return json.load(arquivo)
             except json.JSONDecodeError:
                 return {}
     return {}
 
+def salvar_dados(habitos):
+    with open(ARQUIVO_DADOS, "w") as arquivo:
+        json.dump(habitos, arquivo)
+
 def adicionar_habito(habitos, nome):
     if nome not in habitos:
         habitos[nome] = []
+        salvar_dados(habitos)
         print_sucesso(f"Hábito '{nome}' adicionado e salvo com sucesso!")
-        with open("habitos.json", "w") as arquivo:
-            json.dump(habitos, arquivo)
-        time.sleep(1.5) 
-        os.system('cls' if os.name == 'nt' else 'clear')   
     else:
         print_erro("Esse hábito já existe!")
-        time.sleep(1.5)
-        os.system('cls' if os.name == 'nt' else 'clear')
+    pausar()
 
 def listar_habitos(habitos):
     if not habitos:
         print("Nenhum hábito cadastrado!")
-        time.sleep(1.5)
-        os.system('cls' if os.name == 'nt' else 'clear')
+        pausar()
         return
     for nome, dias in habitos.items():
         print(f"- {nome} | Dias concluídos: {len(dias)}")
-    time.sleep(1.5)
-    os.system('cls' if os.name == 'nt' else 'clear')
+    pausar()
 
 def marcar_habitos(habitos, nome):
     hoje = str(date.today())
-    if nome in habitos:
-        if hoje not in habitos[nome]:
-            habitos[nome].append(hoje)
-            print_sucesso(f"Hábito '{nome}' marcado como concluído para hoje!")
-            time.sleep(1.5)
-            os.system('cls' if os.name == 'nt' else 'clear')
-        else:
-            print_erro(f"Hábito '{nome}' já foi marcado como concluído hoje!")
-            time.sleep(1.5)
-        os.system('cls' if os.name == 'nt' else 'clear')
+    if nome not in habitos:
+        print_erro("Hábito não encontrado!")
+    elif hoje in habitos[nome]:
+        print_erro(f"Hábito '{nome}' já foi marcado como concluído hoje!")
     else:
-            print_erro("Hábito não encontrado!")
-            time.sleep(1.5)
-            os.system('cls' if os.name == 'nt' else 'clear')
+        habitos[nome].append(hoje)
+        salvar_dados(habitos)
+        print_sucesso(f"Hábito '{nome}' marcado como concluído para hoje!")
+    pausar()
 
 def excluir_habito(habitos, nome):
     if nome in habitos:
         del habitos[nome]
+        salvar_dados(habitos)
         print_sucesso(f"Hábito '{nome}' excluído com sucesso!")
-        time.sleep(1.5)
-        os.system('cls' if os.name == 'nt' else 'clear')
     else:
         print_erro("Hábito não encontrado!")
-        time.sleep(1.5)
-        os.system('cls' if os.name == 'nt' else 'clear')
-
-def salvar_dados(habitos):
-    with open("habitos.json", "w") as arquivo:
-        json.dump(habitos, arquivo)
+    pausar()
 
 # -- PROGRAMA PRINCIPAL -- 
 def main():
@@ -116,4 +109,4 @@ def main():
 
         
 if __name__ == "__main__":
-    main() 
+    main()
